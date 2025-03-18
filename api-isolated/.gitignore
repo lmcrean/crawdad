@@ -39,3 +39,5 @@ staticfiles/
 
 # macOS
 .DS_Store 
+
+.env.local
