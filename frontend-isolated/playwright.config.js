@@ -25,5 +25,19 @@ export default defineConfig({
       use: { browserName: 'webkit' },
     }
   ],
+  webServer: [
+    {
+      command: 'cd ../api-isolated && python manage.py runserver',
+      url: 'http://localhost:8000/api/test/',
+      timeout: 120000,
+      reuseExistingServer: !process.env.CI,
+    },
+    {
+      command: 'npm run dev',
+      url: 'http://localhost:3001',
+      timeout: 120000,
+      reuseExistingServer: !process.env.CI,
+    }
+  ],
   outputDir: './screenshots'
 }); 
