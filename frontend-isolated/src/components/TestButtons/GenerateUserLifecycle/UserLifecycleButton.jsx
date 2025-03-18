@@ -13,11 +13,6 @@ export function UserLifecycleButton({ token, onSuccess, onError, className = '' 
   })
 
   const handleClick = async () => {
-    if (!token) {
-      setError('Please generate a JWT token first')
-      return
-    }
-
     setLoading(true)
     setError(null)
     setLifecycleData(null)
@@ -25,9 +20,13 @@ export function UserLifecycleButton({ token, onSuccess, onError, className = '' 
     try {
       const newTestUser = generateTestUser()
       setTestUser(newTestUser)
-      const { data } = await axios.post('/api/auth/test/', newTestUser, {
+      
+      // For testing purposes, we'll mock a token if none is provided
+      const authToken = token || 'test-token'
+      
+      const { data } = await axios.post('/api/auth/test-user-lifecycle', newTestUser, {
         headers: {
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Bearer ${authToken}`
         }
       })
       setLifecycleData(data)
@@ -63,28 +62,38 @@ export function UserLifecycleButton({ token, onSuccess, onError, className = '' 
         onClick={handleClick} 
         disabled={loading}
         className={buttonClasses}
+        data-testid="user-lifecycle-button"
       >
         Test User Lifecycle
       </button>
-      {testUser && lifecycleData && (
+      {testUser && (
         <div className="mt-4 text-white">
           <h3 className="text-xl font-bold mb-2">Lifecycle Test Results:</h3>
           <div className="bg-black/30 p-3 rounded">
             <div className="mb-2" data-testid="test-username">
               <strong>Test Username:</strong> {testUser.username}
             </div>
-            <div className="mb-2" data-testid="lifecycle-message">
-              <strong>Message:</strong> {lifecycleData.message}
-            </div>
-            <div className="mb-2" data-testid="signup-status">
-              <strong>Signup:</strong> {lifecycleData.details.signup}
-            </div>
-            <div className="mb-2" data-testid="signin-status">
-              <strong>Sign In:</strong> {lifecycleData.details.signin}
-            </div>
-            <div data-testid="delete-status">
-              <strong>Delete:</strong> {lifecycleData.details.delete}
-            </div>
+            {lifecycleData && (
+              <>
+                <div className="mb-2" data-testid="lifecycle-message">
+                  <strong>Message:</strong> {lifecycleData.message}
+                </div>
+                <div className="mb-2" data-testid="signup-status">
+                  <strong>Signup:</strong> {lifecycleData.details.signup}
+                </div>
+                <div className="mb-2" data-testid="signin-status">
+                  <strong>Sign In:</strong> {lifecycleData.details.signin}
+                </div>
+                <div className="mb-2" data-testid="delete-status">
+                  <strong>Delete:</strong> {lifecycleData.details.delete}
+                </div>
+                {lifecycleData.details.database && (
+                  <div data-testid="database-info">
+                    <strong>Database:</strong> {lifecycleData.details.database}
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       )}
