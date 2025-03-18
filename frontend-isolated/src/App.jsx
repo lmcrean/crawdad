@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { GenerateJWTButton } from './components/TestButtons/GenerateJwt/GenerateJWTButton'
 import { UserLifecycleButton } from './components/TestButtons/GenerateUserLifecycle/UserLifecycleButton'
-import { APIHealthButton } from './components/TestButtons/GetSupabaseHealth/GetSupaBaseHealthButton'
+import { APIHealthButton } from './components/TestButtons/GetDatabaseHealth/GetDatabaseHealthButton'
 import { GetApiMessageButton } from './components/TestButtons/GetApiMessage/GetApiMessageButton'
 
 function App() {
@@ -37,7 +37,7 @@ function App() {
         <div className="flex border-b border-gray-700">
           <div className="w-40 flex-shrink-0 bg-gray-800 p-4 font-bold text-left border-r border-gray-700">Database</div>
           <div className="flex-grow p-4 text-left">
-            Supabase • PostgreSQL
+            Amazon RDS • PostgreSQL
           </div>
         </div>
         <div className="flex border-b border-gray-700">
