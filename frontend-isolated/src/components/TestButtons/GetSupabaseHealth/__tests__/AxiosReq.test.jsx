@@ -6,7 +6,7 @@ import { APIHealthButton } from '../GetSupaBaseHealthButton'
 
 vi.mock('axios')
 
-describe('GetSupabaseHealth Axios Requests', () => {
+describe('GetDatabaseHealth Axios Requests', () => {
   beforeEach(() => {
     vi.resetAllMocks()
   })
@@ -14,8 +14,8 @@ describe('GetSupabaseHealth Axios Requests', () => {
   it('should make a GET request to /api/health/', async () => {
     const mockResponse = {
       status: 'healthy',
-      message: 'API is healthy',
-      supabase_connected: true
+      message: 'API is connected to PostgreSQL RDS',
+      database_connected: true
     }
     vi.mocked(axios.get).mockResolvedValueOnce({ data: mockResponse })
 
