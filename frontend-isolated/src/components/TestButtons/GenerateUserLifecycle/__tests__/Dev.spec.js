@@ -18,7 +18,7 @@ test.describe('UserLifecycleButton Development Tests', () => {
     await page.goto('http://localhost:3001');
     const container = await page.getByTestId('user-lifecycle-container');
     await expect(container).toBeVisible();
-    const button = container.getByRole('button', { name: 'Test User Lifecycle' });
+    const button = container.getByTestId('user-lifecycle-button');
     await expect(button).toBeVisible();
     await expect(button).toBeEnabled();
     await expect(page.getByTestId('test-username')).not.toBeVisible();
@@ -34,17 +34,18 @@ test.describe('UserLifecycleButton Development Tests', () => {
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({
-          message: 'User lifecycle test completed successfully',
+          message: 'User lifecycle test completed successfully with Amazon RDS',
           details: {
             signup: 'Success',
             signin: 'Success',
-            delete: 'Success'
+            delete: 'Success',
+            database: 'Amazon RDS'
           }
         })
       });
     });
 
-    const button = page.getByRole('button', { name: 'Test User Lifecycle' });
+    const button = page.getByTestId('user-lifecycle-button');
     await button.click();
 
     await expect(page.getByTestId('test-username')).toBeVisible({ timeout: 10000 });
@@ -52,25 +53,27 @@ test.describe('UserLifecycleButton Development Tests', () => {
     await expect(page.getByTestId('signup-status')).toBeVisible();
     await expect(page.getByTestId('signin-status')).toBeVisible();
     await expect(page.getByTestId('delete-status')).toBeVisible();
+    await expect(page.getByTestId('database-info')).toBeVisible();
+    await expect(page.getByTestId('database-info')).toContainText('Amazon RDS');
   });
 
   test('should handle API errors gracefully', async ({ page }) => {
     await page.goto('http://localhost:3001');
     
     // Mock an API error
-    await page.route('**/api/auth/test/', route => 
+    await page.route('**/api/auth/test-user-lifecycle', route => 
       route.fulfill({ 
         status: 400,
         contentType: 'application/json',
-        body: JSON.stringify({ message: 'Failed to complete user lifecycle test' })
+        body: JSON.stringify({ message: 'Failed to complete user lifecycle test with Amazon RDS' })
       })
     );
     
-    const button = page.getByRole('button', { name: 'Test User Lifecycle' });
+    const button = page.getByTestId('user-lifecycle-button');
     await button.click();
 
     await expect(page.getByTestId('error-message')).toBeVisible({ timeout: 10000 });
-    await expect(page.getByText('Failed to complete user lifecycle test')).toBeVisible();
+    await expect(page.getByTestId('error-message')).toContainText('Failed to complete user lifecycle test with Amazon RDS');
   });
 
   test('should disable button during API call', async ({ page }) => {
@@ -83,17 +86,18 @@ test.describe('UserLifecycleButton Development Tests', () => {
         status: 200,
         contentType: 'application/json',
         body: JSON.stringify({
-          message: 'User lifecycle test completed successfully',
+          message: 'User lifecycle test completed successfully with Amazon RDS',
           details: {
             signup: 'Success',
             signin: 'Success',
-            delete: 'Success'
+            delete: 'Success',
+            database: 'Amazon RDS'
           }
         })
       });
     });
 
-    const button = page.getByRole('button', { name: 'Test User Lifecycle' });
+    const button = page.getByTestId('user-lifecycle-button');
     await button.click();
     
     // Button should be disabled while request is in flight
