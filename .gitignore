@@ -171,3 +171,5 @@ cython_debug/
 .pypirc
 
 heroku-api-key.txt
+
+frontend-isolated/screenshots/

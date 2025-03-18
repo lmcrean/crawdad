@@ -15,8 +15,9 @@ export default defineConfig({
     actionTimeout: 60000,
     baseURL: 'http://localhost:3001',
     trace: 'on-first-retry',
+    screenshot: 'on',
   },
-  testIgnore: ['**/*.test.{js,jsx,ts,tsx}'],
+  testIgnore: ['**/*.test.{js,jsx,ts,tsx}', '**/*.py', '**/*test_*.py'],
   testMatch: ['**/*.spec.{js,jsx,ts,tsx}'],
   projects: [
     {
@@ -24,18 +25,5 @@ export default defineConfig({
       use: { browserName: 'webkit' },
     }
   ],
-  webServer: [
-    {
-      command: 'cd ../api-isolated && python manage.py runserver 8000',
-      url: 'http://localhost:8000/api/test/',
-      timeout: 120000,
-      reuseExistingServer: !process.env.CI,
-    },
-    {
-      command: 'npm run dev',
-      url: 'http://localhost:3001',
-      timeout: 120000,
-      reuseExistingServer: !process.env.CI,
-    }
-  ]
+  outputDir: './screenshots'
 }); 
