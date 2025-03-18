@@ -10,14 +10,14 @@ def test_dev_health_check(dev_server):
     url = f"{dev_server}/api/health/"
     response = requests.get(url)
     
-    # In dev environment without Supabase configured, we expect a 500 status
-    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+    # With a working database connection, we expect a 200 status
+    assert response.status_code == status.HTTP_200_OK
     data = response.json()
     
-    # Verify error response structure
-    assert data['status'] == 'unhealthy'
-    assert data['supabase_connected'] is False
-    assert 'Error connecting to Supabase' in data['message']
+    # Verify response structure
+    assert data['status'] == 'healthy'
+    assert data['database_connected'] is True
+    assert 'API is connected to PostgreSQL RDS' in data['message']
 
 @pytest.mark.dev_endpoint
 def test_dev_config_check(dev_server):
@@ -25,17 +25,16 @@ def test_dev_config_check(dev_server):
     url = f"{dev_server}/api/health/"
     response = requests.get(url)
     
-    # In dev environment without Supabase configured, we expect a 500 status
-    assert response.status_code == status.HTTP_500_INTERNAL_SERVER_ERROR
+    # With a working database connection, we expect a 200 status
+    assert response.status_code == status.HTTP_200_OK
     data = response.json()
     
-    # Even though connection fails, we can verify the config flags
-    assert data['supabase_url_configured'] is True
-    assert data['supabase_key_configured'] is True
+    # Check database configuration
+    assert data['database_configured'] is True
     
-    # Additional checks for error state
-    assert data['status'] == 'unhealthy'
-    assert data['supabase_connected'] is False
+    # Additional checks for connected state
+    assert data['status'] == 'healthy'
+    assert data['database_connected'] is True
 
 @pytest.mark.dev_endpoint
 def test_dev_health_check_method_not_allowed(dev_server):
