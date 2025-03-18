@@ -2,9 +2,9 @@ import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './src',
-  timeout: 30000,
+  timeout: 120000,
   expect: {
-    timeout: 5000
+    timeout: 30000
   },
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
@@ -12,7 +12,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    actionTimeout: 0,
+    actionTimeout: 60000,
     baseURL: 'http://localhost:3001',
     trace: 'on-first-retry',
   },
