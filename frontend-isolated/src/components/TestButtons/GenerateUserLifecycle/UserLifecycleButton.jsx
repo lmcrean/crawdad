@@ -17,16 +17,21 @@ export function UserLifecycleButton({ token, onSuccess, onError, className = '' 
     setError(null)
     setLifecycleData(null)
     
+    // Check if token is provided
+    if (!token) {
+      setError('Please generate a JWT token first')
+      if (onError) onError('Please generate a JWT token first')
+      setLoading(false)
+      return
+    }
+    
     try {
       const newTestUser = generateTestUser()
       setTestUser(newTestUser)
       
-      // For testing purposes, we'll mock a token if none is provided
-      const authToken = token || 'test-token'
-      
-      const { data } = await axios.post('/api/auth/test-user-lifecycle', newTestUser, {
+      const { data } = await axios.post('/api/auth/test/', newTestUser, {
         headers: {
-          'Authorization': `Bearer ${authToken}`
+          'Authorization': `Bearer ${token}`
         }
       })
       setLifecycleData(data)
