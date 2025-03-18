@@ -3,8 +3,8 @@ import { test, expect } from '@playwright/test';
 // This file serves as the entry point for all production environment tests
 test.describe('Production Environment Setup', () => {
   test.beforeEach(async ({ page }) => {
-    // Navigate to production environment
-    await page.goto('https://antelope-frontend-isolate-ea7038a582fe.herokuapp.com/');
+    // Navigate to the production page
+    await page.goto('https://crawdad-lmcreans-projects.vercel.app/', { timeout: 60000, waitUntil: 'networkidle' });
     await expect(page).toHaveTitle(/Vite \+ React/);
   });
 
