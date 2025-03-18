@@ -6,7 +6,7 @@ import App from './App.jsx'
 
 // Configure axios base URL
 axios.defaults.baseURL = process.env.NODE_ENV === 'production'
-  ? 'https://antelope-api-isolate-8beb50b26a2a.herokuapp.com'
+  ? 'https://crawdad-api.vercel.app'
   : 'http://localhost:8000';
 
 const root = document.getElementById('root')
