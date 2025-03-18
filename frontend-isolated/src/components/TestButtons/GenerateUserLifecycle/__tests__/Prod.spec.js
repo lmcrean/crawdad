@@ -5,7 +5,7 @@ test.describe('GenerateUserLifecycle Production Tests', () => {
 
   test.beforeEach(async ({ page }) => {
     // Navigate to the production page
-    await page.goto('https://antelope-frontend-isolate-ea7038a582fe.herokuapp.com/');
+    await page.goto('https://crawdad-lmcreans-projects.vercel.app/', { timeout: 60000, waitUntil: 'networkidle' });
   });
 
   test('successfully tests user lifecycle in production', async ({ page }) => {
