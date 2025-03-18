@@ -2,42 +2,38 @@ from django.conf import settings
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-import requests
 import logging
+import django.db
 
 logger = logging.getLogger(__name__)
 
 @api_view(['GET'])
 def health_check(request):
     """
-    Simple health check endpoint that verifies Supabase connection
+    Simple health check endpoint that verifies database connection
     """
     response_data = {
         "status": "unhealthy",
         "message": "",
-        "supabase_connected": False,
-        "supabase_url_configured": bool(settings.SUPABASE_URL),
-        "supabase_key_configured": bool(settings.SUPABASE_KEY)
+        "database_connected": False,
+        "database_configured": bool(settings.DATABASES['default']['NAME'] != 'db.sqlite3')
     }
     
     try:
-        if not settings.SUPABASE_URL or not settings.SUPABASE_KEY:
-            response_data["message"] = "Missing Supabase configuration"
-            return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        # Just check if we can reach the Supabase URL
-        headers = {"apikey": settings.SUPABASE_KEY}
-        requests.get(f"{settings.SUPABASE_URL}/rest/v1/", headers=headers, timeout=5)
-        
+        # Checking if we can connect to the database
+        with django.db.connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+            cursor.fetchone()
+            
         # If we got here, the connection is working
         response_data.update({
             "status": "healthy",
-            "message": "API is configured with Supabase",
-            "supabase_connected": True
+            "message": "API is connected to PostgreSQL RDS",
+            "database_connected": True
         })
         return Response(response_data)
         
-    except requests.RequestException as e:
-        logger.error(f"Error checking Supabase health: {str(e)}")
-        response_data["message"] = f"Error connecting to Supabase: {str(e)}"
+    except Exception as e:
+        logger.error(f"Error checking database health: {str(e)}")
+        response_data["message"] = f"Error connecting to database: {str(e)}"
         return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR) 
