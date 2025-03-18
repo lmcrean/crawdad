@@ -4,7 +4,7 @@ from .views import (
     health_check,
     test_user_lifecycle,
     get_test_token,
-    test_supabase_config
+    test_database_config
 )
 
 urlpatterns = [
@@ -12,7 +12,7 @@ urlpatterns = [
     path('', APITest.as_view(), name='index'),
     path('test/', APITest.as_view(), name='api-test'),
 
-    # 2. Supabase Test - check if the supabase is connected
+    # 2. Database Health Test - check if the PostgreSQL RDS is connected
     path('health/', health_check, name='health_check'),
 
     # 3. Simple JWT token generation
@@ -21,5 +21,5 @@ urlpatterns = [
     # 4. User lifecycle Test - full test including auth
     path('auth/test/', test_user_lifecycle, name='test_user_lifecycle'),
 
-    path('test-config/', test_supabase_config, name='test_config'),
+    path('test-config/', test_database_config, name='test_config'),
 ] 
