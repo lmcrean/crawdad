@@ -35,7 +35,7 @@ JWT_SECRET = os.getenv('JWT_SECRET', SECRET_KEY)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost,*.vercel.app').split(',')
 
 # Append slash to URLs
 APPEND_SLASH = True
@@ -92,12 +92,26 @@ WSGI_APPLICATION = 'api_project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=os.getenv('DATABASE_URL', 'sqlite:////' + str(BASE_DIR / 'db.sqlite3')),
-        conn_max_age=600
-    )
-}
+# Check if running on Vercel (production)
+if 'VERCEL' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('POSTGRES_DATABASE', 'verceldb'),
+            'USER': os.environ.get('POSTGRES_USER', 'default'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD', ''),
+            'HOST': os.environ.get('POSTGRES_HOST', ''),
+            'PORT': os.environ.get('POSTGRES_PORT', '5432'),
+        }
+    }
+else:
+    # Local development settings
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=os.getenv('DATABASE_URL', 'sqlite:////' + str(BASE_DIR / 'db.sqlite3')),
+            conn_max_age=600
+        )
+    }
 
 
 # Password validation
@@ -140,7 +154,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # CORS settings
 CORS_ALLOW_ALL_ORIGINS = os.getenv('CORS_ALLOW_ALL_ORIGINS', 'False') == 'True'
-CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,https://antelope-frontend-isolate-ea7038a582fe.herokuapp.com').split(',')
+CORS_ALLOWED_ORIGINS = os.getenv('CORS_ALLOWED_ORIGINS', 'http://localhost:5173,https://crawdad-lmcreans-projects.vercel.app').split(',')
 CORS_ALLOW_CREDENTIALS = True
 
 # Security settings
