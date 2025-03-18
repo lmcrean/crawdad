@@ -41,3 +41,4 @@ staticfiles/
 .DS_Store 
 
 .env.local
+.vercel
