@@ -25,11 +25,19 @@ def validate_token(token):
     except jwt.InvalidTokenError:
         return False
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
 @authentication_classes([])
 @permission_classes([AllowAny])
 def test_user_lifecycle(request):
     """Test the full user lifecycle (signup -> signin -> delete)"""
+    # For GET requests, just provide status info
+    if request.method == 'GET':
+        return Response({
+            "message": "User lifecycle test endpoint is available",
+            "instructions": "Send a POST request with username and password to test the full lifecycle"
+        }, status=status.HTTP_200_OK)
+        
+    # Continue with POST request processing
     try:
         # Check for Authorization header
         auth_header = request.headers.get('Authorization', request.META.get('HTTP_AUTHORIZATION', ''))
