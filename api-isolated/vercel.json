@@ -1,0 +1,34 @@
+{
+  "builds": [
+    {
+      "src": "api_project/wsgi.py",
+      "use": "@vercel/python"
+    },
+    {
+      "src": "api/**/*.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/test(/?)",
+      "dest": "api/test/index.py"
+    },
+    {
+      "src": "/api/health(/?)",
+      "dest": "api/health/index.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "api_project/wsgi.py"
+    }
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "api_project.settings",
+    "DJANGO_DEBUG": "False",
+    "DJANGO_ALLOWED_HOSTS": "*.vercel.app,127.0.0.1,localhost",
+    "CORS_ALLOW_ALL_ORIGINS": "True",
+    "CORS_ALLOWED_ORIGINS": "http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:3004,http://localhost:5173,https://crawdad-lmcreans-projects.vercel.app"
+  },
+  "public": true
+} 
