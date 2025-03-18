@@ -25,6 +25,11 @@ SUPABASE_URL = 'https://test.supabase.co'
 SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test-key'
 DEBUG = True  # Ensure DEBUG is True for tests
 
+# Disable security redirects for tests
+SECURE_SSL_REDIRECT = False
+SESSION_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = False
+
 # Configure logging for tests
 LOGGING = {
     'version': 1,
