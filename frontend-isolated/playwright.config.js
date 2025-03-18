@@ -16,6 +16,8 @@ export default defineConfig({
     baseURL: 'http://localhost:3001',
     trace: 'on-first-retry',
   },
+  testIgnore: ['**/*.test.{js,jsx,ts,tsx}'],
+  testMatch: ['**/*.spec.{js,jsx,ts,tsx}'],
   projects: [
     {
       name: 'webkit',
