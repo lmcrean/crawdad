@@ -69,10 +69,10 @@ export function APIHealthButton({ onSuccess, onError, className = '' }) {
               <span>Status: {status.status}</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className={status.supabase_connected ? 'text-green-400' : 'text-red-400'}>
-                {status.supabase_connected ? '✓' : '✗'}
+              <span className={status.database_connected ? 'text-green-400' : 'text-red-400'}>
+                {status.database_connected ? '✓' : '✗'}
               </span>
-              <span>Supabase Connected: {status.supabase_connected ? 'Yes' : 'No'}</span>
+              <span>Database Connected: {status.database_connected ? 'Yes' : 'No'}</span>
             </div>
             {status.message && (
               <div className="mt-2 bg-black/30 p-3 rounded">
